@@ -32,6 +32,14 @@ enum SalaryType {
   HOURLY
 }
 
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  GRADUATED
+  TRANSFERRED
+  DROPPED_OUT
+}
+
 model User {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email              String    @unique
@@ -71,4 +79,32 @@ model Employee {
   @@index([employmentStatus])
   @@index([deletedAt])
   @@map("employees")
+}
+
+model Student {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  studentCode    String        @unique @map("student_code")
+  fullName       String        @map("full_name")
+  gender         Gender
+  birthPlace     String        @map("birth_place")
+  birthDate      DateTime      @map("birth_date") @db.Date
+  phoneNumber    String?       @map("phone_number")
+  address        String
+  className      String        @map("class_name")
+  academicYear   String        @map("academic_year")
+  enrollmentDate DateTime      @map("enrollment_date") @db.Date
+  dormitory      String
+  roomNumber     String        @map("room_number")
+  guardianName   String        @map("guardian_name")
+  guardianPhone  String        @map("guardian_phone")
+  studentStatus  StudentStatus @default(ACTIVE) @map("student_status")
+  deletedAt      DateTime?     @map("deleted_at")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  @@index([className])
+  @@index([dormitory])
+  @@index([studentStatus])
+  @@index([deletedAt])
+  @@map("students")
 }
