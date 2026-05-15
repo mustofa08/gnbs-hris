@@ -40,6 +40,20 @@ enum StudentStatus {
   DROPPED_OUT
 }
 
+enum ActivityCategory {
+  TEACHING
+  DORMITORY
+  RELIGIOUS
+  ADMINISTRATIVE
+  DISCIPLINE
+}
+
+enum CompensationType {
+  FIXED
+  HOURLY
+  PER_SESSION
+}
+
 model User {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email              String    @unique
@@ -107,4 +121,29 @@ model Student {
   @@index([studentStatus])
   @@index([deletedAt])
   @@map("students")
+}
+
+model Activity {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  activityCode       String           @unique @map("activity_code")
+  name               String
+  description        String?
+  category           ActivityCategory
+  startTime          DateTime         @map("start_time") @db.Time(0)
+  endTime            DateTime         @map("end_time") @db.Time(0)
+  location           String
+  compensationType   CompensationType @map("compensation_type")
+  compensationAmount Decimal          @default(0) @map("compensation_amount") @db.Decimal(14, 2)
+  penaltyAmount      Decimal          @default(0) @map("penalty_amount") @db.Decimal(14, 2)
+  requiresValidation Boolean          @default(false) @map("requires_validation")
+  isRecurring        Boolean          @default(false) @map("is_recurring")
+  isActive           Boolean          @default(true) @map("is_active")
+  deletedAt          DateTime?        @map("deleted_at")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @default(now()) @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@index([isActive])
+  @@index([deletedAt])
+  @@map("activities")
 }

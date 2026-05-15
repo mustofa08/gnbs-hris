@@ -5,6 +5,7 @@ import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
 import { envValidationSchema } from './config/env.validation';
 import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
+import { ActivitiesModule } from './modules/activities/activities.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { HealthModule } from './modules/health/health.module';
@@ -29,6 +30,7 @@ import { UsersModule } from './modules/users/users.module';
     AuthModule,
     EmployeesModule,
     StudentsModule,
+    ActivitiesModule,
   ],
 })
 export class AppModule {}
