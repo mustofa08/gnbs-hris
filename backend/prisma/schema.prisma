@@ -74,6 +74,12 @@ enum AttendanceStatus {
   EXCUSED
 }
 
+enum PayrollStatus {
+  DRAFT
+  GENERATED
+  PAID
+}
+
 model User {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email              String    @unique
@@ -109,6 +115,7 @@ model Employee {
   schedules        Schedule[]
   validations      ActivityValidation[]
   attendances      Attendance[]
+  payrolls         Payroll[]
   deletedAt        DateTime?        @map("deleted_at")
   createdAt        DateTime         @default(now()) @map("created_at")
   updatedAt        DateTime         @default(now()) @updatedAt @map("updated_at")
@@ -252,4 +259,28 @@ model Attendance {
   @@index([attendanceStatus])
   @@index([checkInTime])
   @@map("attendances")
+}
+
+model Payroll {
+  id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  employeeId        String        @map("employee_id") @db.Uuid
+  employee          Employee      @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  payrollPeriod     String        @map("payroll_period")
+  payrollStatus     PayrollStatus @default(GENERATED) @map("payroll_status")
+  totalActivities   Int           @default(0) @map("total_activities")
+  totalAttendance   Int           @default(0) @map("total_attendance")
+  totalCompensation Decimal       @default(0) @map("total_compensation") @db.Decimal(14, 2)
+  totalPenalty      Decimal       @default(0) @map("total_penalty") @db.Decimal(14, 2)
+  totalLatePenalty  Decimal       @default(0) @map("total_late_penalty") @db.Decimal(14, 2)
+  finalAmount       Decimal       @default(0) @map("final_amount") @db.Decimal(14, 2)
+  generatedAt       DateTime      @default(now()) @map("generated_at")
+  paidAt            DateTime?     @map("paid_at")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([employeeId, payrollPeriod])
+  @@index([employeeId])
+  @@index([payrollPeriod])
+  @@index([payrollStatus])
+  @@map("payrolls")
 }

@@ -10,6 +10,7 @@ import { AttendancesModule } from './modules/attendances/attendances.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { HealthModule } from './modules/health/health.module';
+import { PayrollsModule } from './modules/payrolls/payrolls.module';
 import { SchedulesModule } from './modules/schedules/schedules.module';
 import { StudentsModule } from './modules/students/students.module';
 import { UsersModule } from './modules/users/users.module';
@@ -37,6 +38,7 @@ import { ValidationsModule } from './modules/validations/validations.module';
     SchedulesModule,
     ValidationsModule,
     AttendancesModule,
+    PayrollsModule,
   ],
 })
 export class AppModule {}
