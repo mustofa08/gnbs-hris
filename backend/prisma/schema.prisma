@@ -13,6 +13,25 @@ enum Role {
   EMPLOYEE
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum EmploymentStatus {
+  ACTIVE
+  INACTIVE
+  PROBATION
+  RESIGNED
+  TERMINATED
+}
+
+enum SalaryType {
+  MONTHLY
+  DAILY
+  HOURLY
+}
+
 model User {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email              String    @unique
@@ -23,6 +42,33 @@ model User {
   lastLoginAt        DateTime? @map("last_login_at")
   createdAt          DateTime  @default(now()) @map("created_at")
   updatedAt          DateTime  @default(now()) @updatedAt @map("updated_at")
+  employee           Employee?
 
   @@map("users")
+}
+
+model Employee {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  employeeCode     String           @unique @map("employee_code")
+  fullName         String           @map("full_name")
+  gender           Gender
+  birthDate        DateTime         @map("birth_date") @db.Date
+  phoneNumber      String           @map("phone_number")
+  address          String
+  department       String
+  position         String
+  joinDate         DateTime         @map("join_date") @db.Date
+  employmentStatus EmploymentStatus @default(ACTIVE) @map("employment_status")
+  salaryType       SalaryType       @map("salary_type")
+  baseSalary       Decimal          @map("base_salary") @db.Decimal(14, 2)
+  userId           String?          @unique @map("user_id") @db.Uuid
+  user             User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  deletedAt        DateTime?        @map("deleted_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @default(now()) @updatedAt @map("updated_at")
+
+  @@index([department])
+  @@index([employmentStatus])
+  @@index([deletedAt])
+  @@map("employees")
 }
