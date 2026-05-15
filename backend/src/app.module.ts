@@ -9,6 +9,7 @@ import { ActivitiesModule } from './modules/activities/activities.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { HealthModule } from './modules/health/health.module';
+import { SchedulesModule } from './modules/schedules/schedules.module';
 import { StudentsModule } from './modules/students/students.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -31,6 +32,7 @@ import { UsersModule } from './modules/users/users.module';
     EmployeesModule,
     StudentsModule,
     ActivitiesModule,
+    SchedulesModule,
   ],
 })
 export class AppModule {}
