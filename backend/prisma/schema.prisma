@@ -61,6 +61,12 @@ enum RecurrenceType {
   MONTHLY
 }
 
+enum ValidationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email              String    @unique
@@ -72,6 +78,7 @@ model User {
   createdAt          DateTime  @default(now()) @map("created_at")
   updatedAt          DateTime  @default(now()) @updatedAt @map("updated_at")
   employee           Employee?
+  validationsReviewed ActivityValidation[] @relation("ValidationReviewer")
 
   @@map("users")
 }
@@ -93,6 +100,7 @@ model Employee {
   userId           String?          @unique @map("user_id") @db.Uuid
   user             User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
   schedules        Schedule[]
+  validations      ActivityValidation[]
   deletedAt        DateTime?        @map("deleted_at")
   createdAt        DateTime         @default(now()) @map("created_at")
   updatedAt        DateTime         @default(now()) @updatedAt @map("updated_at")
@@ -147,6 +155,7 @@ model Activity {
   isRecurring        Boolean          @default(false) @map("is_recurring")
   isActive           Boolean          @default(true) @map("is_active")
   schedules          Schedule[]
+  validations        ActivityValidation[]
   deletedAt          DateTime?        @map("deleted_at")
   createdAt          DateTime         @default(now()) @map("created_at")
   updatedAt          DateTime         @default(now()) @updatedAt @map("updated_at")
@@ -174,6 +183,7 @@ model Schedule {
   location       String
   notes          String?
   isActive       Boolean        @default(true) @map("is_active")
+  validations    ActivityValidation[]
   deletedAt      DateTime?      @map("deleted_at")
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
@@ -183,4 +193,30 @@ model Schedule {
   @@index([isActive])
   @@index([deletedAt])
   @@map("schedules")
+}
+
+model ActivityValidation {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  scheduleId    String           @map("schedule_id") @db.Uuid
+  schedule      Schedule         @relation(fields: [scheduleId], references: [id], onDelete: Restrict)
+  employeeId    String           @map("employee_id") @db.Uuid
+  employee      Employee         @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  activityId    String           @map("activity_id") @db.Uuid
+  activity      Activity         @relation(fields: [activityId], references: [id], onDelete: Restrict)
+  status        ValidationStatus @default(PENDING)
+  notes         String?
+  evidenceUrl   String?          @map("evidence_url")
+  submittedAt   DateTime         @default(now()) @map("submitted_at")
+  validatedAt   DateTime?        @map("validated_at")
+  validatedById String?          @map("validated_by_id") @db.Uuid
+  validatedBy   User?            @relation("ValidationReviewer", fields: [validatedById], references: [id], onDelete: SetNull)
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @default(now()) @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([employeeId])
+  @@index([activityId])
+  @@index([scheduleId])
+  @@index([validatedById])
+  @@map("activity_validations")
 }
