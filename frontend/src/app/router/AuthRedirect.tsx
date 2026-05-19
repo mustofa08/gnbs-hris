@@ -1,18 +1,12 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { routePaths } from './route-paths';
+import { Navigate, Outlet } from 'react-router-dom';
 import { getDefaultRouteByRole } from '@features/auth/lib/get-default-route-by-role';
 import { useAuthStore } from '@features/auth/store/auth.store';
 
-export function ProtectedRoute() {
-  const location = useLocation();
+export function AuthRedirect() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
 
-  if (!isAuthenticated) {
-    return <Navigate to={routePaths.login} replace state={{ from: location }} />;
-  }
-
-  if (location.pathname === routePaths.app && user) {
+  if (isAuthenticated && user) {
     return <Navigate to={getDefaultRouteByRole(user.role)} replace />;
   }
 
