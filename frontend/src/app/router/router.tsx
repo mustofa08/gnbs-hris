@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppLayout } from '@app/layouts/AppLayout';
 import { AuthLayout } from '@app/layouts/AuthLayout';
 import { LoginPage } from '@features/auth/pages/LoginPage';
+import { AdminDashboardPage } from '@features/dashboard/admin/pages/AdminDashboardPage';
 import { AuthRedirect } from './AuthRedirect';
 import { ProtectedRoute } from './ProtectedRoute';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
           {
             element: <RoleProtectedRoute allowedRoles={['SUPER_ADMIN', 'ADMIN']} />,
             children: [
-              { path: 'admin/dashboard', element: <RoutePlaceholder title="Admin dashboard" /> },
+              { path: 'admin/dashboard', element: <AdminDashboardPage /> },
               { path: 'admin/employees', element: <RoutePlaceholder title="Employees" /> },
               { path: 'admin/students', element: <RoutePlaceholder title="Students" /> },
               { path: 'admin/activities', element: <RoutePlaceholder title="Activities" /> },
