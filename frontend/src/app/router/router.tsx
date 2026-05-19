@@ -3,6 +3,7 @@ import { AppLayout } from '@app/layouts/AppLayout';
 import { AuthLayout } from '@app/layouts/AuthLayout';
 import { LoginPage } from '@features/auth/pages/LoginPage';
 import { AdminDashboardPage } from '@features/dashboard/admin/pages/AdminDashboardPage';
+import { EmployeeDashboardPage } from '@features/dashboard/employee/pages/EmployeeDashboardPage';
 import { AuthRedirect } from './AuthRedirect';
 import { ProtectedRoute } from './ProtectedRoute';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
@@ -57,7 +58,7 @@ export const router = createBrowserRouter([
           {
             element: <RoleProtectedRoute allowedRoles={['EMPLOYEE']} />,
             children: [
-              { path: 'employee/dashboard', element: <RoutePlaceholder title="Employee dashboard" /> },
+              { path: 'employee/dashboard', element: <EmployeeDashboardPage /> },
               { path: 'employee/schedule', element: <RoutePlaceholder title="My schedule" /> },
               { path: 'employee/attendance', element: <RoutePlaceholder title="My attendance" /> },
               { path: 'employee/validations', element: <RoutePlaceholder title="My validations" /> },
