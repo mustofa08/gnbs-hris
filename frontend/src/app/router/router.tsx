@@ -4,6 +4,10 @@ import { AuthLayout } from '@app/layouts/AuthLayout';
 import { LoginPage } from '@features/auth/pages/LoginPage';
 import { AdminDashboardPage } from '@features/dashboard/admin/pages/AdminDashboardPage';
 import { EmployeeDashboardPage } from '@features/dashboard/employee/pages/EmployeeDashboardPage';
+import { CreateEmployeePage } from '@features/employees/pages/CreateEmployeePage';
+import { EditEmployeePage } from '@features/employees/pages/EditEmployeePage';
+import { EmployeeDetailPage } from '@features/employees/pages/EmployeeDetailPage';
+import { EmployeeListPage } from '@features/employees/pages/EmployeeListPage';
 import { AuthRedirect } from './AuthRedirect';
 import { ProtectedRoute } from './ProtectedRoute';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
@@ -46,7 +50,10 @@ export const router = createBrowserRouter([
             element: <RoleProtectedRoute allowedRoles={['SUPER_ADMIN', 'ADMIN']} />,
             children: [
               { path: 'admin/dashboard', element: <AdminDashboardPage /> },
-              { path: 'admin/employees', element: <RoutePlaceholder title="Employees" /> },
+              { path: 'admin/employees', element: <EmployeeListPage /> },
+              { path: 'admin/employees/create', element: <CreateEmployeePage /> },
+              { path: 'admin/employees/:employeeId', element: <EmployeeDetailPage /> },
+              { path: 'admin/employees/:employeeId/edit', element: <EditEmployeePage /> },
               { path: 'admin/students', element: <RoutePlaceholder title="Students" /> },
               { path: 'admin/activities', element: <RoutePlaceholder title="Activities" /> },
               { path: 'admin/schedules', element: <RoutePlaceholder title="Schedules" /> },
